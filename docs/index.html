@@ -98,20 +98,9 @@
     <div class="section-inner">
       <h2 class="section-title">Why it matters</h2>
       <div class="prose-invert prose-slate max-w-none">
-        <ul class="grid md:grid-cols-3 gap-6 not-prose">
-          <li class="info">
-            <h4 class="info-title">Real-world impact</h4>
-            <p>Many tasks in logistics, chip design, biology, and crypto reduce to NP-complete problems.</p>
-          </li>
-          <li class="info">
-            <h4 class="info-title">All or nothing</h4>
-            <p>If one NP-complete problem is easy, they all are.</p>
-          </li>
-          <li class="info">
-            <h4 class="info-title">Security implications</h4>
-            <p>Modern cryptography assumes some problems are hard to solve.</p>
-          </li>
-        </ul>
+        <p class="text-slate-300 text-lg leading-relaxed">
+          P vs NP sits at the center of computational complexity because it formalizes the boundary between efficient computation and brute‑force search. If P = NP, every problem whose solutions can be verified quickly (NP) could also be solved quickly, collapsing vast classes via polynomial‑time reductions and yielding efficient algorithms for routing, chip layout, protein design, and more—while undermining cryptographic assumptions that rely on average‑case hardness. If P ≠ NP, it validates a pervasive notion of intractability, explaining why decades of work have produced approximation schemes, heuristics, and fixed‑parameter algorithms rather than universal polynomial‑time methods for NP‑complete problems. Either resolution would reorganize large parts of theory and practice: a proof of equality by giving powerful algorithmic techniques, or a proof of separation by sharpening lower‑bound methods and complexity‑class separations that currently elude us.
+        </p>
       </div>
     </div>
   </section>
@@ -120,19 +109,10 @@
   <section id="intuitions" class="section">
     <div class="section-inner">
       <h2 class="section-title">Core intuitions</h2>
-      <div class="grid lg:grid-cols-3 gap-8">
-        <div class="tile">
-          <h3 class="tile-title">Search vs. Verify</h3>
-          <p>Checking a solution is often easier than finding one. Like checking a Sudoku vs. solving it.</p>
-        </div>
-        <div class="tile">
-          <h3 class="tile-title">Reductions</h3>
-          <p>Show problem A is hard by turning a known hard problem into A.</p>
-        </div>
-        <div class="tile">
-          <h3 class="tile-title">Completeness</h3>
-          <p>NP-complete problems are the “hard hubs”: solve one fast, solve them all.</p>
-        </div>
+      <div class="prose-invert prose-slate max-w-none">
+        <p class="text-slate-300 text-lg leading-relaxed">
+          The core picture is structural: NP formalizes problems whose solutions admit short certificates verifiable in polynomial time, revealing an asymmetry between verification and search. Polynomial‑time many‑one reductions organize these problems into a hierarchy, letting us transfer hardness from one task to another. NP‑complete problems are maximal under these reductions: a polynomial‑time algorithm for any one collapses the class. This framework explains why, in the apparent absence of general polynomial‑time algorithms, practice leans on approximations, heuristics, parameterized algorithms, and average‑case analyses that navigate—but do not remove—the combinatorial explosion.
+        </p>
       </div>
     </div>
   </section>
