@@ -35,11 +35,15 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
     varsContainer.innerHTML = '';
     names.forEach(name => {
       const btn = create('button', { className: 'toggle', type: 'button', textContent: `${name}: false` });
+      // Accessibility: expose pressed state and clear label
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', `Toggle ${name}`);
       btn.dataset.on = 'false';
       btn.addEventListener('click', () => {
         const on = btn.dataset.on === 'true';
         btn.dataset.on = String(!on);
         btn.textContent = `${name}: ${!on}`;
+        btn.setAttribute('aria-pressed', String(!on));
       });
       btn.dataset.varName = name;
       varsContainer.appendChild(btn);
@@ -386,6 +390,20 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
     const id = btn.dataset.tab;
     const p = document.getElementById(id);
     if (p) p.classList.add('active');
+
+    // Accessibility: reflect tab selection
+    tabBtns.forEach(b => {
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      b.setAttribute('role', 'tab');
+      const pid = b.dataset.tab;
+      if (pid) {
+        b.setAttribute('aria-controls', pid);
+      }
+    });
+    panels.forEach(panel => {
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-hidden', panel.id === id ? 'false' : 'true');
+    });
   }));
 
   // 3-SAT -> CLIQUE builder

@@ -147,15 +147,15 @@
         </div>
       </div>
 
-      <div class="reduction-tabs">
-        <button class="reduction-tab active" data-tab="tab-3sat-clique">3-SAT → CLIQUE</button>
-        <button class="reduction-tab" data-tab="tab-clique-vc">CLIQUE → VERTEX COVER</button>
-        <button class="reduction-tab" data-tab="tab-sat-ss">SAT → Subset Sum</button>
+      <div class="reduction-tabs" role="tablist" aria-label="Reductions gallery tabs">
+        <button class="reduction-tab active" role="tab" aria-selected="true" aria-controls="tab-3sat-clique" data-tab="tab-3sat-clique">3-SAT → CLIQUE</button>
+        <button class="reduction-tab" role="tab" aria-selected="false" aria-controls="tab-clique-vc" data-tab="tab-clique-vc">CLIQUE → VERTEX COVER</button>
+        <button class="reduction-tab" role="tab" aria-selected="false" aria-controls="tab-sat-ss" data-tab="tab-sat-ss">SAT → Subset Sum</button>
       </div>
 
       <div class="reduction-panels">
         <!-- 3-SAT to CLIQUE -->
-        <div id="tab-3sat-clique" class="reduction-panel active">
+        <div id="tab-3sat-clique" class="reduction-panel active" role="tabpanel" aria-hidden="false" tabindex="0">
           <p class="demo-sub mb-4">Each clause becomes a group of literal-nodes; connect non-conflicting literals across clauses. A k-clique corresponds to a satisfying assignment (k = number of clauses).</p>
           <div class="grid md:grid-cols-2 gap-6">
             <div>
@@ -167,13 +167,13 @@
             <div class="panel">
               <div class="panel-header">Graph (nodes and edges)</div>
               <pre id="rg-3sat-graph" class="text-slate-300 text-sm whitespace-pre-wrap"></pre>
-              <div class="mt-2 text-sm"><span id="rg-3sat-result" class="font-semibold"></span></div>
+              <div class="mt-2 text-sm"><span id="rg-3sat-result" class="font-semibold" aria-live="polite" aria-atomic="true"></span></div>
             </div>
           </div>
         </div>
 
         <!-- CLIQUE to Vertex Cover (high-level) -->
-        <div id="tab-clique-vc" class="reduction-panel">
+        <div id="tab-clique-vc" class="reduction-panel" role="tabpanel" aria-hidden="true">
           <div class="tile">
             <h3 class="tile-title">Complement graph intuition</h3>
             <p>If G has a clique of size k, then the complement graph Ḡ has an independent set of size k. The complement of an independent set is a vertex cover of size |V|−k in G.</p>
@@ -185,12 +185,12 @@
             <label class="label mt-3">k (clique size)</label>
             <input id="rg-cv-k" class="input" placeholder="3" />
             <button id="rg-cv-check" class="btn-primary mt-3">Check</button>
-            <div id="rg-cv-out" class="mt-3 text-sm text-slate-300"></div>
+            <div id="rg-cv-out" class="mt-3 text-sm text-slate-300" aria-live="polite" aria-atomic="true"></div>
           </div>
         </div>
 
         <!-- SAT to Subset Sum (intuition) -->
-        <div id="tab-sat-ss" class="reduction-panel">
+        <div id="tab-sat-ss" class="reduction-panel" role="tabpanel" aria-hidden="true">
           <div class="tile">
             <h3 class="tile-title">Encoding decisions as digits</h3>
             <p>Classic reduction encodes truth assignments into digits across columns so that selecting certain numbers satisfies all clauses if and only if the sum matches a constructed target.</p>
@@ -229,10 +229,10 @@
           <div>
             <div class="panel">
               <div class="panel-header">Result</div>
-              <div id="sat-result" class="text-xl font-semibold text-slate-200">—</div>
-              <div id="sat-error" class="mt-2 text-sm text-rose-400"></div>
-              <div id="sat-witness" class="mt-3 text-sm text-slate-300"></div>
-              <div id="sat-metrics" class="mt-1 text-xs text-slate-400"></div>
+              <div id="sat-result" class="text-xl font-semibold text-slate-200" aria-live="polite" aria-atomic="true">—</div>
+              <div id="sat-error" class="mt-2 text-sm text-rose-400" aria-live="assertive" aria-atomic="true"></div>
+              <div id="sat-witness" class="mt-3 text-sm text-slate-300" aria-live="polite" aria-atomic="true"></div>
+              <div id="sat-metrics" class="mt-1 text-xs text-slate-400" aria-live="polite" aria-atomic="true"></div>
             </div>
           </div>
         </div>
@@ -255,8 +255,8 @@
           <div>
             <div class="panel">
               <div class="panel-header">Result</div>
-              <div id="ss-result" class="text-xl font-semibold text-slate-200">—</div>
-              <div id="ss-witness" class="mt-2 text-sm text-slate-300"></div>
+              <div id="ss-result" class="text-xl font-semibold text-slate-200" aria-live="polite" aria-atomic="true">—</div>
+              <div id="ss-witness" class="mt-2 text-sm text-slate-300" aria-live="polite" aria-atomic="true"></div>
             </div>
           </div>
         </div>
@@ -282,7 +282,7 @@
           <div>
             <div class="panel">
               <div class="panel-header">Status</div>
-              <div id="gc-status" class="text-xl font-semibold text-slate-200">—</div>
+              <div id="gc-status" class="text-xl font-semibold text-slate-200" aria-live="polite" aria-atomic="true">—</div>
               <div id="gc-edges" class="mt-2 text-sm text-slate-300"></div>
             </div>
           </div>
@@ -312,11 +312,60 @@
   <section id="resources" class="section">
     <div class="section-inner">
       <h2 class="section-title">Further resources</h2>
-      <ul class="list-disc pl-5 text-slate-300 space-y-1">
-        <li>MIT 6.046J / 18.410J: Introduction to Algorithms — complexity lectures</li>
-        <li>Michael Sipser — Introduction to the Theory of Computation</li>
-        <li>Scott Aaronson — P vs. NP overview articles and talks</li>
-      </ul>
+      <div class="prose-invert prose-slate max-w-none">
+        <h3 class="font-semibold mb-2">Learning resources</h3>
+        <ul class="list-disc pl-5 text-slate-300 space-y-1">
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://ocw.mit.edu/courses/6-046j-introduction-to-algorithms-sma-5503-fall-2005/pages/lecture-notes/">
+              MIT OCW 6.046J: Introduction to Algorithms — complexity lectures
+            </a>
+          </li>
+          <li>
+            Sipser, Michael. <em>Introduction to the Theory of Computation</em> (3rd ed.).
+          </li>
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.scottaaronson.com/papers/pnp.pdf">
+              Scott Aaronson — NP-complete Problems and Physical Reality (survey)
+            </a>
+          </li>
+        </ul>
+
+        <h3 class="font-semibold mt-6 mb-2">Key references (P vs NP)</h3>
+        <ul class="list-disc pl-5 text-slate-300 space-y-1">
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://members.loria.fr/CGavoille/CPF/Complexity/cook71.pdf">
+              Cook, S. A. (1971). The complexity of theorem-proving procedures. STOC.
+            </a>
+          </li>
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.cs.princeton.edu/courses/archive/fall06/cos528/handouts/karp.pdf">
+              Karp, R. M. (1972). Reducibility among combinatorial problems. In Complexity of Computer Computations.
+            </a>
+          </li>
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://epubs.siam.org/doi/10.1137/0204036">
+              Ladner, R. (1975). On the structure of polynomial time reducibility. SIAM J. Comput.
+            </a>
+          </li>
+          <li>
+            Garey, M., Johnson, D. (1979). <em>Computers and Intractability: A Guide to the Theory of NP-Completeness</em>.
+          </li>
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.claymath.org/millennium-problems/p-vs-np-problem/">
+              Clay Mathematics Institute — Millennium Prize: P vs NP
+            </a>
+          </li>
+          <li>
+            <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://dl.acm.org/doi/10.1145/1592761.1592779">
+              Fortnow, L. (2009). The status of the P versus NP problem. CACM.
+            </a>
+          </li>
+        </ul>
+
+        <p class="text-sm text-slate-400 mt-4">
+          Note: This site offers educational intuition and small interactive demos; it does not constitute formal proofs.
+        </p>
+      </div>
     </div>
   </section>
 
