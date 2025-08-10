@@ -556,6 +556,9 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
     });
   }
 
+  // End Reductions Gallery IIFE
+})();
+
  
 
 // ------------------------------
