@@ -28,6 +28,10 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="bg-slate-950 text-slate-100 selection:bg-brand-400/30">
+  <!-- Attribution top -->
+  <div class="w-full text-center text-[11px] text-slate-400 py-1 border-b border-white/5 bg-slate-900/70" role="note" aria-label="Attribution">
+    <a href="https://www.bonelli.dev/" target="_blank" rel="noopener noreferrer" class="hover:underline" aria-label="Made by Bonelli Labs (opens in new tab)">Made by Bonelli Labs</a>
+  </div>
   <!-- Navbar -->
   <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60 bg-slate-900/80 border-b border-white/5">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -305,12 +309,9 @@
         </div>
       </div>
 
-    </div>
-  </section>
-
   <!-- Resources -->
   <section id="resources" class="section">
-    <div class="section-inner">
+    <h2 class="h2">Further resources</h2>
       <h2 class="section-title">Further resources</h2>
       <div class="prose-invert prose-slate max-w-none">
         <h3 class="font-semibold mb-2">Learning resources</h3>
@@ -369,8 +370,142 @@
     </div>
   </section>
 
-  <footer class="py-10 text-center text-sm text-slate-400 border-t border-white/5">
-    Made with curiosity • This site is for education and exploration
+  <section id="advanced-labs" class="section">
+    <h2 class="h2">Advanced Labs</h2>
+
+    <div id="reduction-lab" class="card mt-6">
+      <h3 class="h3">Reduction Lab (Drag-and-Drop Pipeline)</h3>
+      <p class="muted">Build a reduction pipeline and see size blowup and certificate mappings.</p>
+      <div class="flex gap-4 flex-wrap mt-3" aria-label="Problem palette" role="list">
+        <button class="chip reduction-node" data-prob="3sat" role="listitem">3-SAT</button>
+        <button class="chip reduction-node" data-prob="clique" role="listitem">CLIQUE</button>
+        <button class="chip reduction-node" data-prob="vc" role="listitem">Vertex Cover</button>
+        <button class="chip reduction-node" data-prob="is" role="listitem">Independent Set</button>
+        <button class="chip reduction-node" data-prob="3color" role="listitem">3-Coloring</button>
+      </div>
+      <div class="mt-4">
+        <label class="label">Pipeline</label>
+        <div id="rl-pipeline" class="pipeline" aria-live="polite"></div>
+        <div class="mt-2 flex gap-2">
+          <button id="rl-clear" class="btn">Clear</button>
+          <button id="rl-explain" class="btn-ghost">Explain</button>
+        </div>
+      </div>
+      <div id="rl-stats" class="mt-3 text-sm" aria-live="polite"></div>
+      <div id="rl-explainer" class="mt-2 text-sm"></div>
+    </div>
+
+    <div id="scaling-wall" class="card mt-8">
+      <h3 class="h3">Scaling Wall (Instance Size vs Time)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div>
+          <label class="label" for="sw-problem">Problem</label>
+          <select id="sw-problem" class="input" aria-label="Scaling Wall problem selector">
+            <option value="sat">3-SAT (random)</option>
+            <option value="clique">k-Clique (random)</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="sw-n">n (size)</label>
+          <input id="sw-n" type="range" min="4" max="22" value="12" class="range" aria-label="Scaling Wall size n">
+          <div class="muted text-xs">Value: <span id="sw-n-val">12</span></div>
+        </div>
+        <div id="sw-extra" class="mt-2">
+          <label class="label" for="sw-density">Density</label>
+          <input id="sw-density" type="range" min="10" max="90" value="50" class="range" aria-label="Edge/clause density">
+          <div class="muted text-xs">Value: <span id="sw-density-val">50%</span></div>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button id="sw-run" class="btn">Run</button>
+        <button id="sw-clear" class="btn-ghost">Clear</button>
+      </div>
+      <canvas id="sw-chart" height="220" class="mt-3 w-full bg-slate-900/40 rounded"></canvas>
+      <div id="sw-log" class="mt-2 text-xs monospace"></div>
+    </div>
+
+    <div id="approx-game" class="card mt-8">
+      <h3 class="h3">Approximation Game (Greedy vs Optimal)</h3>
+      <p class="muted">Compare greedy and exact solutions on tiny instances.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div>
+          <label class="label" for="ag-problem">Problem</label>
+          <select id="ag-problem" class="input" aria-label="Approximation game problem selector">
+            <option value="vc">Vertex Cover</option>
+            <option value="sc">Set Cover</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="ag-size">Random instance size</label>
+          <input id="ag-size" type="range" min="4" max="12" value="8" class="range" aria-label="Approximation game instance size">
+          <div class="muted text-xs">Value: <span id="ag-size-val">8</span></div>
+        </div>
+        <div class="mt-6">
+          <button id="ag-generate" class="btn">Generate</button>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button id="ag-greedy" class="btn">Run Greedy</button>
+        <button id="ag-exact" class="btn-ghost">Run Optimal (small)</button>
+      </div>
+      <div id="ag-instance" class="mt-3 text-sm"></div>
+      <div id="ag-result" class="mt-2 text-sm" aria-live="polite"></div>
+    </div>
+
+    <div id="fpt-playground" class="card mt-8">
+      <h3 class="h3">Parameterized Complexity Playground</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div>
+          <label class="label" for="fpt-problem">Problem</label>
+          <select id="fpt-problem" class="input" aria-label="Parameterized problem selector">
+            <option value="kclique">k-Clique</option>
+            <option value="kpath">k-Path</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="fpt-n">n</label>
+          <input id="fpt-n" type="range" min="6" max="22" value="12" class="range" aria-label="FPT playground n">
+          <div class="muted text-xs">Value: <span id="fpt-n-val">12</span></div>
+        </div>
+        <div>
+          <label class="label" for="fpt-k">k</label>
+          <input id="fpt-k" type="range" min="2" max="8" value="4" class="range" aria-label="FPT parameter k">
+          <div class="muted text-xs">Value: <span id="fpt-k-val">4</span></div>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button id="fpt-run" class="btn">Run</button>
+        <button id="fpt-rand" class="btn-ghost">Random Graph</button>
+      </div>
+      <div id="fpt-output" class="mt-2 text-sm" aria-live="polite"></div>
+    </div>
+
+    <div id="fg-stopwatch" class="card mt-8">
+      <h3 class="h3">Fine-Grained Complexity Stopwatch</h3>
+      <p class="muted">Explore hypothetical time laws under ETH/SETH style assumptions.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div>
+          <label class="label" for="fg-k">Clause width (k for k-SAT)</label>
+          <input id="fg-k" type="range" min="2" max="6" value="3" class="range" aria-label="Clause width k">
+          <div class="muted text-xs">Value: <span id="fg-k-val">3</span></div>
+        </div>
+        <div>
+          <label class="label" for="fg-n">n (variables)</label>
+          <input id="fg-n" type="range" min="10" max="60" value="30" class="range" aria-label="Variables n">
+          <div class="muted text-xs">Value: <span id="fg-n-val">30</span></div>
+        </div>
+        <div class="mt-6">
+          <button id="fg-calc" class="btn">Estimate</button>
+        </div>
+      </div>
+      <div id="fg-output" class="mt-2 text-sm" aria-live="polite"></div>
+    </div>
+
+  </section>
+
+  <footer class="footer mt-16">
+    <div class="muted text-sm">Disclaimers: educational intuition, not formal proofs. See references for rigor.</div>
+    Made with curiosity • This site is for education and exploration • <a href="https://www.bonelli.dev/" target="_blank" rel="noopener noreferrer" class="hover:underline" aria-label="Made by Bonelli Labs (opens in new tab)">Made by Bonelli Labs</a>
   </footer>
 
   <script src="./script.remade.js"></script>
