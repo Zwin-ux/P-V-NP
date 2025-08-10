@@ -59,16 +59,13 @@
             Is finding as easy as checking?
           </h1>
           <p class="mt-6 text-lg text-slate-300 max-w-2xl">
-            P vs NP asks whether every problem whose solution can be quickly <em>verified</em> can also be quickly <em>found</em>.
-            Explore the core ideas with intuition-first explanations and interactive sandboxes.
+            P vs NP asks: if we can check a solution fast, can we also find one fast?
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="#demos" class="btn-primary">Try the Demos</a>
             <a href="#intuitions" class="btn-ghost">Learn the Intuition</a>
           </div>
-          <div class="mt-8 text-xs text-slate-400">
-            Millennium Prize Problem • $1,000,000 for a resolution
-          </div>
+          <div class="mt-8 text-xs text-slate-400">Millennium Prize Problem</div>
         </div>
         <div>
           <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl ring-1 ring-white/10">
@@ -100,15 +97,15 @@
         <ul class="grid md:grid-cols-3 gap-6 not-prose">
           <li class="info">
             <h4 class="info-title">Real-world impact</h4>
-            <p>From logistics and chip design to biology and cryptography, many tasks reduce to NP-complete problems.</p>
+            <p>Many tasks in logistics, chip design, biology, and crypto reduce to NP-complete problems.</p>
           </li>
           <li class="info">
             <h4 class="info-title">All or nothing</h4>
-            <p>If any NP-complete problem has a fast algorithm, then every problem in NP does too.</p>
+            <p>If one NP-complete problem is easy, they all are.</p>
           </li>
           <li class="info">
             <h4 class="info-title">Security implications</h4>
-            <p>Modern cryptography relies on some problems being hard to solve quickly.</p>
+            <p>Modern cryptography assumes some problems are hard to solve.</p>
           </li>
         </ul>
       </div>
@@ -122,15 +119,15 @@
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="tile">
           <h3 class="tile-title">Search vs. Verify</h3>
-          <p>Verifying a proposed solution is often much easier than finding one. Think of checking a Sudoku vs. solving it.</p>
+          <p>Checking a solution is often easier than finding one. Like checking a Sudoku vs. solving it.</p>
         </div>
         <div class="tile">
           <h3 class="tile-title">Reductions</h3>
-          <p>To show a problem is hard, reduce a known hard problem to it: a general recipe for transferring difficulty.</p>
+          <p>Show problem A is hard by turning a known hard problem into A.</p>
         </div>
         <div class="tile">
           <h3 class="tile-title">Completeness</h3>
-          <p>NP-complete problems are the hubs of difficulty: crack one, and the rest follow by reductions.</p>
+          <p>NP-complete problems are the “hard hubs”: solve one fast, solve them all.</p>
         </div>
       </div>
     </div>
@@ -224,13 +221,18 @@
             <textarea id="cnf-input" class="input" rows="5" placeholder="Example: (x1 | !x2) & (x2 | x3)"></textarea>
             <p class="hint">Allowed: x1..x9, ! (not), | (or), & (and), parentheses</p>
             <div class="mt-4 flex flex-wrap gap-2" id="vars-container"></div>
-            <button id="sat-check" class="btn-primary mt-4">Check</button>
+            <div class="mt-4 flex gap-2">
+              <button id="sat-check" class="btn-primary">Check</button>
+              <button id="sat-solve" class="btn-ghost">Solve (bruteforce, tiny)</button>
+            </div>
           </div>
           <div>
             <div class="panel">
               <div class="panel-header">Result</div>
               <div id="sat-result" class="text-xl font-semibold text-slate-200">—</div>
               <div id="sat-error" class="mt-2 text-sm text-rose-400"></div>
+              <div id="sat-witness" class="mt-3 text-sm text-slate-300"></div>
+              <div id="sat-metrics" class="mt-1 text-xs text-slate-400"></div>
             </div>
           </div>
         </div>
@@ -256,6 +258,49 @@
               <div id="ss-result" class="text-xl font-semibold text-slate-200">—</div>
               <div id="ss-witness" class="mt-2 text-sm text-slate-300"></div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graph Coloring (3-color) -->
+      <div class="demo mt-12">
+        <div class="demo-header">
+          <h3 class="demo-title">3-Coloring (small graph)</h3>
+          <p class="demo-sub">Click nodes to cycle colors. No edge should connect same-colored nodes.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <div id="gc-canvas" class="panel gc-canvas">
+              <!-- nodes/edges drawn by JS -->
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button id="gc-check" class="btn-primary">Check</button>
+              <button id="gc-reset" class="btn-ghost">Reset</button>
+              <button id="gc-greedy" class="btn-ghost">Greedy fill</button>
+            </div>
+          </div>
+          <div>
+            <div class="panel">
+              <div class="panel-header">Status</div>
+              <div id="gc-status" class="text-xl font-semibold text-slate-200">—</div>
+              <div id="gc-edges" class="mt-2 text-sm text-slate-300"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reduction Quiz -->
+      <div class="demo mt-12">
+        <div class="demo-header">
+          <h3 class="demo-title">Reduction Quiz</h3>
+          <p class="demo-sub">Match the reduction. Quick practice.</p>
+        </div>
+        <div class="panel">
+          <div id="rq-question" class="text-slate-200 font-semibold"></div>
+          <div id="rq-options" class="mt-3 flex flex-col gap-2"></div>
+          <div class="mt-4 flex gap-2">
+            <button id="rq-next" class="btn-primary">Next</button>
+            <span id="rq-score" class="text-sm text-slate-300"></span>
           </div>
         </div>
       </div>

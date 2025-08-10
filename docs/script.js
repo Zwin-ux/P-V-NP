@@ -14,8 +14,11 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
   const cnfInput = $('#cnf-input');
   const varsContainer = $('#vars-container');
   const checkBtn = $('#sat-check');
+  const solveBtn = $('#sat-solve');
   const resultEl = $('#sat-result');
   const errorEl = $('#sat-error');
+  const witnessEl = $('#sat-witness');
+  const metricsEl = $('#sat-metrics');
 
   const MAX_VARS = 9; // x1..x9 supported
 
@@ -150,6 +153,8 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
   checkBtn.addEventListener('click', () => {
     try {
       errorEl.textContent = '';
+      witnessEl && (witnessEl.textContent = '');
+      metricsEl && (metricsEl.textContent = '');
       const tokens = tokenize(cnfInput.value);
       const rpn = toRPN(tokens);
       const env = getEnvFromToggles();
@@ -162,6 +167,166 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
       errorEl.textContent = String(err.message || err);
     }
   });
+
+  // Brute-force small solve (exponential; for n <= 10)
+  if (solveBtn) {
+    solveBtn.addEventListener('click', () => {
+      try {
+        errorEl.textContent = '';
+        witnessEl && (witnessEl.textContent = '');
+        metricsEl && (metricsEl.textContent = '');
+        const t0 = performance.now();
+        const tokens = tokenize(cnfInput.value);
+        const rpn = toRPN(tokens);
+        const names = extractVars(cnfInput.value).slice(0, MAX_VARS);
+        const n = names.length;
+        if (n === 0) throw new Error('No variables found');
+        const limit = 1 << Math.min(n, 20);
+        let found = null;
+        let checked = 0;
+        for (let mask = 0; mask < limit; mask++) {
+          const env = {};
+          for (let i = 0; i < n; i++) env[names[i]] = !!(mask & (1 << i));
+          checked++;
+          if (evalRPN(rpn, env)) { found = env; break; }
+        }
+        const t1 = performance.now();
+        if (found) {
+          resultEl.textContent = 'SAT (found assignment)';
+          resultEl.style.color = 'rgb(34 197 94)';
+          if (witnessEl) witnessEl.textContent = 'Witness: ' + names.map(k => `${k}=${found[k]}`).join(', ');
+        } else {
+          resultEl.textContent = 'UNSAT (under brute-force search)';
+          resultEl.style.color = 'rgb(248 113 113)';
+        }
+        if (metricsEl) metricsEl.textContent = `Tried ${checked} assignments in ${(t1 - t0).toFixed(1)} ms`;
+      } catch (err) {
+        resultEl.textContent = '—';
+        resultEl.style.color = '';
+        errorEl.textContent = String(err.message || err);
+      }
+    });
+  }
+})();
+
+// ------------------------------
+// Graph Coloring (3-color) mini-game
+// ------------------------------
+(function initGraphColoring() {
+  const host = document.getElementById('gc-canvas');
+  if (!host) return;
+  const statusEl = document.getElementById('gc-status');
+  const edgesEl = document.getElementById('gc-edges');
+  const btnCheck = document.getElementById('gc-check');
+  const btnReset = document.getElementById('gc-reset');
+  const btnGreedy = document.getElementById('gc-greedy');
+
+  // Fixed small graph (6 nodes)
+  const nodes = [
+    { id: 1, x: 24,  y: 24,  c: -1 },
+    { id: 2, x: 180, y: 28,  c: -1 },
+    { id: 3, x: 320, y: 36,  c: -1 },
+    { id: 4, x: 70,  y: 160, c: -1 },
+    { id: 5, x: 220, y: 140, c: -1 },
+    { id: 6, x: 340, y: 190, c: -1 },
+  ];
+  const edges = [ [1,2],[2,3],[1,4],[2,5],[3,6],[4,5],[5,6],[2,4] ];
+
+  function render() {
+    host.innerHTML = '';
+    // nodes as clickable chips
+    for (const n of nodes) {
+      const el = document.createElement('div');
+      el.className = 'gc-node';
+      if (n.c >= 0) el.classList.add(`gc-c${n.c}`);
+      el.style.left = `${n.x}px`;
+      el.style.top = `${n.y}px`;
+      el.textContent = String(n.id);
+      el.title = 'Click to change color';
+      el.addEventListener('click', () => {
+        n.c = (n.c + 1) % 3;
+        render();
+      });
+      host.appendChild(el);
+    }
+    edgesEl.textContent = 'Edges: ' + edges.map(([u,v])=>`(${u}-${v})`).join(', ');
+  }
+
+  function isValidColoring() {
+    for (const [u,v] of edges) {
+      const cu = nodes.find(n=>n.id===u).c;
+      const cv = nodes.find(n=>n.id===v).c;
+      if (cu === -1 || cv === -1) return false;
+      if (cu === cv) return false;
+    }
+    return true;
+  }
+
+  function greedyFill() {
+    // simple greedy by node order
+    for (const n of nodes) {
+      const used = new Set();
+      for (const [u,v] of edges) {
+        if (u === n.id) { const c = nodes.find(x=>x.id===v).c; if (c>=0) used.add(c); }
+        if (v === n.id) { const c = nodes.find(x=>x.id===u).c; if (c>=0) used.add(c); }
+      }
+      for (let c=0;c<3;c++) if (!used.has(c)) { n.c = c; break; }
+    }
+    render();
+  }
+
+  btnCheck && btnCheck.addEventListener('click', () => {
+    const ok = isValidColoring();
+    statusEl.textContent = ok ? 'Proper 3-coloring ✓' : 'Not a valid 3-coloring';
+    statusEl.style.color = ok ? 'rgb(34 197 94)' : 'rgb(248 113 113)';
+  });
+  btnReset && btnReset.addEventListener('click', () => { nodes.forEach(n=> n.c = -1); statusEl.textContent = '—'; statusEl.style.color=''; render(); });
+  btnGreedy && btnGreedy.addEventListener('click', greedyFill);
+
+  render();
+})();
+
+// ------------------------------
+// Reduction Quiz
+// ------------------------------
+(function initReductionQuiz() {
+  const qEl = document.getElementById('rq-question');
+  const optsEl = document.getElementById('rq-options');
+  const nextBtn = document.getElementById('rq-next');
+  const scoreEl = document.getElementById('rq-score');
+  if (!qEl || !optsEl || !nextBtn) return;
+
+  const QS = [
+    { q: 'Which reduction shows SAT ≤p 3-SAT?', opts: ['Duplicate variables', 'Clause splitting with new vars', 'Graph complement'], a: 1 },
+    { q: 'Independent Set and Vertex Cover are related by…', opts: ['Graph complement', 'Set complement in same graph', 'Edge subdivision'], a: 1 },
+    { q: '3-SAT to CLIQUE mapping uses…', opts: ['Edges within clauses', 'Edges across non-conflicting literals', 'Edges only on negations'], a: 1 },
+    { q: 'Subset Sum encodes SAT by…', opts: ['Digits per clause/variable', 'Matrix multiplication', 'Sorting'], a: 0 },
+  ];
+
+  let i = 0, score = 0, locked = false;
+
+  function renderQ() {
+    locked = false;
+    const cur = QS[i % QS.length];
+    qEl.textContent = cur.q;
+    optsEl.innerHTML = '';
+    cur.opts.forEach((txt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-ghost';
+      btn.type = 'button';
+      btn.textContent = txt;
+      btn.addEventListener('click', () => {
+        if (locked) return; locked = true;
+        if (idx === cur.a) { score++; btn.style.background = 'rgba(34,197,94,0.25)'; }
+        else { btn.style.background = 'rgba(248,113,113,0.25)'; }
+        scoreEl.textContent = `Score: ${score}`;
+      });
+      optsEl.appendChild(btn);
+    });
+  }
+
+  nextBtn.addEventListener('click', () => { i++; renderQ(); });
+  renderQ();
 })();
 
 // ------------------------------
@@ -368,11 +533,23 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
           ? `G has a clique of size k=${k}. Then Ḡ has an independent set of size k, and G has a vertex cover of size |V|−k=${vcSize}.`
           : `No clique of size k=${k} found in this small brute-force check.`;
       } catch (err) {
-        cvOut.textContent = String(err.message || err);
-      }
-    });
   }
+
+  btn.addEventListener('click', () => {
+    try {
+      const edges = parseGraph(graphInput.value);
+      const colors = parseColors(colorsInput.value);
+      const ok = isProperColoring(edges, colors);
+      resultEl.textContent = ok ? 'Proper coloring!' : 'Not a proper coloring';
+      resultEl.style.color = ok ? 'rgb(34 197 94)' : 'rgb(248 113 113)';
+    } catch (err) {
+      resultEl.textContent = String(err.message || err);
+    }
+  });
 })();
+
+ 
+
 // ------------------------------
 // Subset Sum Verifier (small n)
 // ------------------------------
