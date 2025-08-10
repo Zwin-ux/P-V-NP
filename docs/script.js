@@ -551,20 +551,10 @@ function create(el, opts = {}) { const e = document.createElement(el); Object.as
           ? `G has a clique of size k=${k}. Then Ḡ has an independent set of size k, and G has a vertex cover of size |V|−k=${vcSize}.`
           : `No clique of size k=${k} found in this small brute-force check.`;
       } catch (err) {
+        cvOut.textContent = String(err.message || err);
+      }
+    });
   }
-
-  btn.addEventListener('click', () => {
-    try {
-      const edges = parseGraph(graphInput.value);
-      const colors = parseColors(colorsInput.value);
-      const ok = isProperColoring(edges, colors);
-      resultEl.textContent = ok ? 'Proper coloring!' : 'Not a proper coloring';
-      resultEl.style.color = ok ? 'rgb(34 197 94)' : 'rgb(248 113 113)';
-    } catch (err) {
-      resultEl.textContent = String(err.message || err);
-    }
-  });
-})();
 
  
 
