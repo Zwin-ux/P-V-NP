@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P vs NP — An Intuitive Guide</title>
+  <meta name="description" content="A beautiful, intuitive guide to P vs NP with interactive demos: SAT and Subset Sum." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            brand: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+              400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+              800: '#3730a3', 900: '#312e81'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 selection:bg-brand-400/30">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60 bg-slate-900/80 border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <a href="#" class="flex items-center gap-2 group">
+          <div id="brand-logo-box" class="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-700 shadow-lg shadow-brand-700/30 group-hover:scale-105 transition-transform"></div>
+          <span id="brand-title-text" class="font-semibold tracking-tight">P vs NP</span>
+        </a>
+        <div class="hidden sm:flex items-center gap-6 text-sm text-slate-300">
+          <a class="hover:text-white" href="#why">Why it matters</a>
+          <a class="hover:text-white" href="#intuitions">Intuitions</a>
+          <a class="hover:text-white" href="#reductions">Reductions</a>
+          <a class="hover:text-white" href="#demos">Demos</a>
+          <a class="hover:text-white" href="#resources">Resources</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+      <div class="hero-blob"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+            Is finding as easy as checking?
+          </h1>
+          <p class="mt-6 text-lg text-slate-300 max-w-2xl">
+            P vs NP asks whether every problem whose solution can be quickly <em>verified</em> can also be quickly <em>found</em>.
+            Explore the core ideas with intuition-first explanations and interactive sandboxes.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#demos" class="btn-primary">Try the Demos</a>
+            <a href="#intuitions" class="btn-ghost">Learn the Intuition</a>
+          </div>
+          <div class="mt-8 text-xs text-slate-400">
+            Millennium Prize Problem • $1,000,000 for a resolution
+          </div>
+        </div>
+        <div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl ring-1 ring-white/10">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="card">
+                <h3 class="card-title">P</h3>
+                <p class="card-text">Problems solvable quickly (polynomial time).</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">NP</h3>
+                <p class="card-text">Solutions verifiable quickly.</p>
+              </div>
+              <div class="card col-span-2">
+                <h3 class="card-title">NP-Complete</h3>
+                <p class="card-text">The "hardest" problems in NP — a fast solution to one solves them all.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why it matters -->
+  <section id="why" class="section">
+    <div class="section-inner">
+      <h2 class="section-title">Why it matters</h2>
+      <div class="prose-invert prose-slate max-w-none">
+        <ul class="grid md:grid-cols-3 gap-6 not-prose">
+          <li class="info">
+            <h4 class="info-title">Real-world impact</h4>
+            <p>From logistics and chip design to biology and cryptography, many tasks reduce to NP-complete problems.</p>
+          </li>
+          <li class="info">
+            <h4 class="info-title">All or nothing</h4>
+            <p>If any NP-complete problem has a fast algorithm, then every problem in NP does too.</p>
+          </li>
+          <li class="info">
+            <h4 class="info-title">Security implications</h4>
+            <p>Modern cryptography relies on some problems being hard to solve quickly.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intuitions -->
+  <section id="intuitions" class="section">
+    <div class="section-inner">
+      <h2 class="section-title">Core intuitions</h2>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="tile">
+          <h3 class="tile-title">Search vs. Verify</h3>
+          <p>Verifying a proposed solution is often much easier than finding one. Think of checking a Sudoku vs. solving it.</p>
+        </div>
+        <div class="tile">
+          <h3 class="tile-title">Reductions</h3>
+          <p>To show a problem is hard, reduce a known hard problem to it: a general recipe for transferring difficulty.</p>
+        </div>
+        <div class="tile">
+          <h3 class="tile-title">Completeness</h3>
+          <p>NP-complete problems are the hubs of difficulty: crack one, and the rest follow by reductions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reductions Gallery -->
+  <section id="reductions" class="section">
+    <div class="section-inner">
+      <div class="flex items-end justify-between flex-wrap gap-4">
+        <h2 class="section-title">Reductions gallery</h2>
+        <div class="theme-controls">
+          <div class="theme-swatch" data-theme="indigo" title="Indigo"></div>
+          <div class="theme-swatch" data-theme="emerald" title="Emerald"></div>
+          <div class="theme-swatch" data-theme="rose" title="Rose"></div>
+          <input id="brand-title" class="input theme-input" placeholder="Site title (e.g., P vs NP)" />
+          <button id="apply-brand" class="btn-ghost">Apply</button>
+        </div>
+      </div>
+
+      <div class="reduction-tabs">
+        <button class="reduction-tab active" data-tab="tab-3sat-clique">3-SAT → CLIQUE</button>
+        <button class="reduction-tab" data-tab="tab-clique-vc">CLIQUE → VERTEX COVER</button>
+        <button class="reduction-tab" data-tab="tab-sat-ss">SAT → Subset Sum</button>
+      </div>
+
+      <div class="reduction-panels">
+        <!-- 3-SAT to CLIQUE -->
+        <div id="tab-3sat-clique" class="reduction-panel active">
+          <p class="demo-sub mb-4">Each clause becomes a group of literal-nodes; connect non-conflicting literals across clauses. A k-clique corresponds to a satisfying assignment (k = number of clauses).</p>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="label">3-CNF (up to 3 clauses)</label>
+              <input id="rg-3sat-input" class="input" placeholder="(x1 | !x2 | x3) & (!x1 | x2 | x3)" />
+              <button id="rg-3sat-build" class="btn-primary mt-3">Build graph</button>
+              <div class="hint">Variables: x1..x5</div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">Graph (nodes and edges)</div>
+              <pre id="rg-3sat-graph" class="text-slate-300 text-sm whitespace-pre-wrap"></pre>
+              <div class="mt-2 text-sm"><span id="rg-3sat-result" class="font-semibold"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIQUE to Vertex Cover (high-level) -->
+        <div id="tab-clique-vc" class="reduction-panel">
+          <div class="tile">
+            <h3 class="tile-title">Complement graph intuition</h3>
+            <p>If G has a clique of size k, then the complement graph Ḡ has an independent set of size k. The complement of an independent set is a vertex cover of size |V|−k in G.</p>
+          </div>
+          <div class="mt-4 panel">
+            <div class="panel-header">Quick check (small graphs)</div>
+            <label class="label">Edges of G (u-v, comma-separated)</label>
+            <input id="rg-cv-edges" class="input" placeholder="1-2,1-3,2-3,3-4" />
+            <label class="label mt-3">k (clique size)</label>
+            <input id="rg-cv-k" class="input" placeholder="3" />
+            <button id="rg-cv-check" class="btn-primary mt-3">Check</button>
+            <div id="rg-cv-out" class="mt-3 text-sm text-slate-300"></div>
+          </div>
+        </div>
+
+        <!-- SAT to Subset Sum (intuition) -->
+        <div id="tab-sat-ss" class="reduction-panel">
+          <div class="tile">
+            <h3 class="tile-title">Encoding decisions as digits</h3>
+            <p>Classic reduction encodes truth assignments into digits across columns so that selecting certain numbers satisfies all clauses if and only if the sum matches a constructed target.</p>
+          </div>
+          <div class="mt-4 panel">
+            <div class="panel-header">Toy encoding sketch</div>
+            <p class="text-sm text-slate-300">Use the Subset Sum demo below to feel the flavor: you choose numbers (like choosing literals) and aim for a target (satisfying all clauses). This panel focuses on the concept rather than the full construction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demos -->
+  <section id="demos" class="section">
+    <div class="section-inner">
+      <h2 class="section-title">Interactive demos</h2>
+
+      <!-- SAT Playground -->
+      <div class="demo">
+        <div class="demo-header">
+          <h3 class="demo-title">SAT Playground (tiny CNF)</h3>
+          <p class="demo-sub">Enter a small CNF formula and toggle variable assignments to see if it satisfies.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="label">CNF formula</label>
+            <textarea id="cnf-input" class="input" rows="5" placeholder="Example: (x1 | !x2) & (x2 | x3)"></textarea>
+            <p class="hint">Allowed: x1..x9, ! (not), | (or), & (and), parentheses</p>
+            <div class="mt-4 flex flex-wrap gap-2" id="vars-container"></div>
+            <button id="sat-check" class="btn-primary mt-4">Check</button>
+          </div>
+          <div>
+            <div class="panel">
+              <div class="panel-header">Result</div>
+              <div id="sat-result" class="text-xl font-semibold text-slate-200">—</div>
+              <div id="sat-error" class="mt-2 text-sm text-rose-400"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subset Sum Verifier -->
+      <div class="demo mt-12">
+        <div class="demo-header">
+          <h3 class="demo-title">Subset Sum Verifier</h3>
+          <p class="demo-sub">Provide numbers and a target. We check if any subset matches the target.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="label">Numbers (comma-separated)</label>
+            <input id="ss-numbers" class="input" placeholder="e.g., 3, 34, 4, 12, 5, 2" />
+            <label class="label mt-3">Target</label>
+            <input id="ss-target" class="input" placeholder="e.g., 9" />
+            <button id="ss-check" class="btn-primary mt-4">Check</button>
+          </div>
+          <div>
+            <div class="panel">
+              <div class="panel-header">Result</div>
+              <div id="ss-result" class="text-xl font-semibold text-slate-200">—</div>
+              <div id="ss-witness" class="mt-2 text-sm text-slate-300"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section id="resources" class="section">
+    <div class="section-inner">
+      <h2 class="section-title">Further resources</h2>
+      <ul class="list-disc pl-5 text-slate-300 space-y-1">
+        <li>MIT 6.046J / 18.410J: Introduction to Algorithms — complexity lectures</li>
+        <li>Michael Sipser — Introduction to the Theory of Computation</li>
+        <li>Scott Aaronson — P vs. NP overview articles and talks</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="py-10 text-center text-sm text-slate-400 border-t border-white/5">
+    Made with curiosity • This site is for education and exploration
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
