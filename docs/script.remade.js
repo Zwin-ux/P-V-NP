@@ -1,5 +1,6 @@
 (function bootstrap() {
   document.addEventListener('DOMContentLoaded', () => {
+    safeInit('Reveal', initReveal);
     safeInit('Handout', initHandoutMode);
     safeInit('SAT', initSAT);
     safeInit('SubsetSum', initSubsetSum);
@@ -19,6 +20,19 @@
   const $ = (sel) => document.querySelector(sel);
   const $all = (sel) => Array.from(document.querySelectorAll(sel));
   const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+
+  // ---------------------- Entry reveal ----------------------
+  function initReveal() {
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduce) return;
+    const els = $all('.reveal');
+    requestAnimationFrame(() => {
+      els.forEach((node, i) => {
+        node.style.setProperty('--reveal-delay', `${i * 80}ms`);
+        node.classList.add('reveal-on');
+      });
+    });
+  }
 
   // ---------------------- Handout mode ----------------------
   function initHandoutMode() {

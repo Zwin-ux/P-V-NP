@@ -114,6 +114,17 @@ body {
 .plaque-title { font-weight: 600; margin-bottom: 4px; }
 .plaque-text { color: var(--muted); font-size: 14px; }
 
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(12px); }
+.reveal-on {
+  animation: fadeUp 650ms cubic-bezier(0.16, 0.78, 0.32, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .filmstrip {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
