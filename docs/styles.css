@@ -50,54 +50,13 @@ body {
   justify-content: space-between;
   gap: 14px;
 }
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--ivory);
-  text-decoration: none;
-}
-.brand-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 18%;
-  background: linear-gradient(135deg, #1f2937, #111827);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 8px 20px rgba(0,0,0,0.3);
-}
+.brand { display: flex; align-items: center; color: var(--ivory); text-decoration: none; }
 .brand-title { font-weight: 700; letter-spacing: -0.01em; }
 .brand-sub { color: var(--muted); font-size: 12px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .brand-line { letter-spacing: 0.02em; }
 .brand-sep { opacity: 0.5; }
 .brand-link { color: var(--accent); text-decoration: none; }
 .brand-link:hover { text-decoration: underline; }
-.nav-links {
-  display: flex;
-  gap: 10px;
-  font-size: 13px;
-  align-items: center;
-  letter-spacing: 0.04em;
-}
-.nav-links a {
-  color: var(--ivory);
-  text-decoration: none;
-  padding: 6px 0;
-  opacity: 0.78;
-  position: relative;
-}
-.nav-links a:hover { opacity: 1; }
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(217,255,90,0.9), transparent);
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-.nav-links a:hover::after { opacity: 1; }
-.nav-dot { color: rgba(255,255,255,0.45); font-size: 12px; }
 .nav-actions { display: flex; gap: 10px; }
 
 .section {
