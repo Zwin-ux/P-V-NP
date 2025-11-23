@@ -31,6 +31,8 @@
         node.style.setProperty('--reveal-delay', `${i * 80}ms`);
         node.classList.add('reveal-on');
       });
+      const sweep = $('.title-sweep');
+      if (sweep) sweep.classList.add('sweep-on');
     });
   }
 
