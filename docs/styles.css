@@ -37,7 +37,7 @@ body {
   top: 0;
   z-index: 10;
   backdrop-filter: blur(10px);
-  background: linear-gradient(90deg, rgba(217,255,90,0.10), rgba(11,15,25,0.75) 18%, rgba(11,15,25,0.8));
+  background: rgba(11, 15, 25, 0.82);
   border-bottom: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 12px 40px rgba(0,0,0,0.25);
 }
@@ -60,9 +60,9 @@ body {
 .brand-mark {
   width: 40px;
   height: 40px;
-  border-radius: 30% 70% 60% 40%;
-  background: radial-gradient(circle at 30% 30%, #fff, #d9ff5a 55%, #8fbf2f 75%);
-  box-shadow: 0 10px 26px rgba(217, 255, 90, 0.3), 0 0 0 1px rgba(255,255,255,0.12) inset;
+  border-radius: 18%;
+  background: linear-gradient(135deg, #1f2937, #111827);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 8px 20px rgba(0,0,0,0.3);
 }
 .brand-title { font-weight: 700; letter-spacing: -0.01em; }
 .brand-sub { color: var(--muted); font-size: 12px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
