@@ -33,6 +33,8 @@
       });
       const sweep = $('.title-sweep');
       if (sweep) sweep.classList.add('sweep-on');
+      const cta = document.querySelector('.btn.primary');
+      if (cta) cta.classList.add('pulse-once');
     });
   }
 
