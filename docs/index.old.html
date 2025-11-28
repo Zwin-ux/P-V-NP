@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P vs NP Exploration Hall</title>
+  <meta name="description" content="A museum-style exploration of P vs NP with tactile interactives and guided plaques.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Space Grotesk"', 'ui-sans-serif', 'system-ui'], mono: ['"IBM Plex Mono"', 'SFMono-Regular', 'Menlo', 'monospace'] },
+          colors: { brand: { 500: '#d9ff5a', 600: '#b4e63f', 700: '#93c93a' } }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="bg-night text-ivory">
+  <div class="grain"></div>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div>
+          <div class="brand-title">P vs NP Exploration Hall</div>
+          <div class="brand-sub">By <a class="brand-link" href="https://www.bonelli.dev/" target="_blank" rel="noopener noreferrer">Bonelli.dev</a></div>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="handout-toggle" class="chip ghost">Print handout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="entry" class="section hero">
+      <div class="hero-bg"></div>
+      <div class="section-inner hero-grid">
+        <div>
+          <p class="eyebrow reveal">Museum Exhibit</p>
+          <h1 class="hero-title reveal"><span class="title-sweep">Is checking as easy as finding?</span></h1>
+          <p class="hero-copy reveal">Move from verification to search, ride the reductions conveyor, and try compact interactives built to feel like a floor exhibit.</p>
+          <div class="hero-actions reveal">
+            <a href="#verify-search" class="btn primary">Enter the hall</a>
+            <a href="#orientation" class="btn ghost">Orientation strip</a>
+          </div>
+        </div>
+        <div class="hero-ribbon">
+          <span class="hero-chip reveal">Verification</span>
+          <span class="hero-chip reveal">Search</span>
+          <span class="hero-chip reveal">Reductions</span>
+          <span class="hero-chip reveal">Scaling</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="orientation" class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Start here</p>
+            <h2 class="section-title">Orientation filmstrip</h2>
+          </div>
+        </div>
+        <div class="filmstrip">
+          <div class="strip-card">
+            <div class="strip-title">Check vs find</div>
+            <p class="strip-text">Certificates are quick to check. Finding them may require searching the universe.</p>
+          </div>
+          <div class="strip-card">
+            <div class="strip-title">P inside NP</div>
+            <p class="strip-text">Inside NP, P is where verifying and solving collapse together.</p>
+          </div>
+          <div class="strip-card">
+            <div class="strip-title">Reductions as belts</div>
+            <p class="strip-text">A conveyor carries instances from one problem into another without blowing up size too much.</p>
+          </div>
+          <div class="strip-card">
+            <div class="strip-title">NP-complete hub</div>
+            <p class="strip-text">Solve any one NP-complete problem in polynomial time and the whole hub falls into P.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="verify-search" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Verify vs Search Lab</h2>
+            <p class="muted">Preset instances, tactile toggles, and clause lights. No typing required.</p>
+          </div>
+          <div class="station-controls">
+            <button id="reset-verify" class="chip ghost">Reset station</button>
+          </div>
+        </div>
+        <div class="grid-2col gap">
+          <div class="card tall">
+            <div class="card-head">
+              <div>
+                <div class="card-kicker">SAT console</div>
+                <div class="card-title">Clause toggles</div>
+              </div>
+              <div class="preset-row" id="sat-presets"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-top">
+                <div class="label">Formula</div>
+                <code id="sat-formula" class="code-block"></code>
+              </div>
+              <div class="label mt-4">Toggle variables</div>
+              <div id="sat-toggles" class="toggle-row"></div>
+              <div class="clause-lights" id="sat-clause-lights"></div>
+              <div class="btn-row mt-3">
+                <button id="sat-check" class="btn primary">Check</button>
+                <button id="sat-solve" class="btn ghost">Show witness</button>
+              </div>
+              <div class="result-line" id="sat-result" aria-live="polite"></div>
+              <div class="muted" id="sat-metrics"></div>
+            </div>
+          </div>
+          <div class="card tall">
+            <div class="card-head">
+              <div>
+                <div class="card-kicker">Subset Sum console</div>
+                <div class="card-title">Numbers on a scale</div>
+              </div>
+              <div class="preset-row" id="ss-presets"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-top">
+                <div class="label">Numbers</div>
+                <code id="ss-numbers" class="code-block"></code>
+              </div>
+              <div class="panel-top mt-3">
+                <div class="label">Target</div>
+                <code id="ss-target" class="code-block"></code>
+              </div>
+              <div class="btn-row mt-3">
+                <button id="ss-check" class="btn primary">Weigh subset</button>
+                <button id="ss-reveal" class="btn ghost">Reveal subset</button>
+              </div>
+              <div class="result-line" id="ss-result" aria-live="polite"></div>
+              <div class="muted" id="ss-witness"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conveyor" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Reductions Conveyor</h2>
+            <p class="muted">Drop specimens on the belt. Watch arrows draw. Export a freeze frame.</p>
+          </div>
+          <div class="station-controls">
+            <button id="rl-clear" class="chip ghost">Clear belt</button>
+            <button id="rl-export" class="chip ghost">Export PNG</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-kicker">Palette</div>
+            <div class="preset-row" aria-label="Problem palette" role="list">
+              <button class="chip reduction-node" data-prob="3sat" role="listitem">3-SAT</button>
+              <button class="chip reduction-node" data-prob="clique" role="listitem">CLIQUE</button>
+              <button class="chip reduction-node" data-prob="vc" role="listitem">Vertex Cover</button>
+              <button class="chip reduction-node" data-prob="is" role="listitem">Independent Set</button>
+              <button class="chip reduction-node" data-prob="3color" role="listitem">3-Coloring</button>
+              <button class="chip reduction-node" data-prob="hamil" role="listitem">Hamiltonian Path</button>
+            </div>
+          </div>
+          <div class="pipeline" id="rl-pipeline" aria-live="polite"></div>
+          <div class="muted mt-2" id="rl-stats"></div>
+          <div class="muted mt-2" id="rl-explainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="zoo" class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Exhibit wall</p>
+            <h2 class="section-title">NP-Complete Zoo</h2>
+          </div>
+          <span class="badge">Touch to flip</span>
+        </div>
+        <div class="zoo-grid" id="zoo-grid"></div>
+      </div>
+    </section>
+
+    <section id="coloring" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Graph Coloring Corner</h2>
+            <p class="muted">Pick a preset graph. Color the marbles. Edges glow when you clash.</p>
+          </div>
+          <div class="station-controls" id="gc-presets"></div>
+        </div>
+        <div class="grid-2col gap">
+          <div class="card tall">
+            <div id="gc-canvas" class="gc-canvas"></div>
+            <div class="btn-row mt-3">
+              <button id="gc-check" class="btn primary">Check coloring</button>
+              <button id="gc-greedy" class="btn ghost">Greedy fill</button>
+              <button id="gc-reset" class="btn ghost">Reset</button>
+            </div>
+          </div>
+          <div class="card tall">
+            <div class="label">Edges</div>
+            <div id="gc-edges" class="muted"></div>
+            <div class="result-line mt-3" id="gc-status"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scaling" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Scaling Wall</h2>
+            <p class="muted">Feel how small increases in n explode work for brute force.</p>
+          </div>
+          <div class="station-controls">
+            <button id="sw-clear" class="chip ghost">Clear wall</button>
+          </div>
+        </div>
+        <div class="grid-2col gap">
+          <div class="card tall">
+            <div class="control-grid">
+              <label class="label" for="sw-problem">Problem</label>
+              <select id="sw-problem" class="input">
+                <option value="sat">3-SAT (random)</option>
+                <option value="clique">k-Clique (random)</option>
+              </select>
+              <label class="label mt-3" for="sw-n">Size n</label>
+              <input id="sw-n" type="range" min="4" max="22" value="12" class="range">
+              <div class="muted text-xs">Value: <span id="sw-n-val">12</span></div>
+              <label class="label mt-3" for="sw-density">Density</label>
+              <input id="sw-density" type="range" min="10" max="90" value="50" class="range">
+              <div class="muted text-xs">Value: <span id="sw-density-val">50%</span></div>
+            </div>
+            <div class="btn-row mt-3">
+              <button id="sw-run" class="btn primary">Plot</button>
+              <button id="sw-export" class="btn ghost">Export CSV</button>
+            </div>
+          </div>
+          <div class="card tall">
+            <canvas id="sw-chart" height="220" class="chart"></canvas>
+            <div id="sw-log" class="muted monospace mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="approx" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Approximation Corner</h2>
+            <p class="muted">Greedy vs optimal on tiny instances. See the gap as bars.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="control-grid">
+            <label class="label" for="ag-problem">Problem</label>
+            <select id="ag-problem" class="input">
+              <option value="vc">Vertex Cover</option>
+              <option value="sc">Set Cover</option>
+            </select>
+            <label class="label mt-3" for="ag-size">Random instance size</label>
+            <input id="ag-size" type="range" min="4" max="12" value="8" class="range">
+            <div class="muted text-xs">Value: <span id="ag-size-val">8</span></div>
+          </div>
+          <div class="btn-row mt-3">
+            <button id="ag-generate" class="btn primary">Generate instance</button>
+            <button id="ag-greedy" class="btn ghost">Greedy</button>
+            <button id="ag-exact" class="btn ghost">Optimal</button>
+          </div>
+          <div id="ag-instance" class="muted mt-2"></div>
+          <div id="ag-result" class="result-line mt-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fpt" class="section station">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Station</p>
+            <h2 class="section-title">Parameterized Nook</h2>
+            <p class="muted">k as a lever. See kernelization and small brute force.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="control-grid">
+            <label class="label" for="fpt-problem">Problem</label>
+            <select id="fpt-problem" class="input">
+              <option value="kclique">k-Clique</option>
+              <option value="kpath">k-Path</option>
+            </select>
+            <label class="label mt-3" for="fpt-n">n</label>
+            <input id="fpt-n" type="range" min="6" max="22" value="12" class="range">
+            <div class="muted text-xs">Value: <span id="fpt-n-val">12</span></div>
+            <label class="label mt-3" for="fpt-k">k</label>
+            <input id="fpt-k" type="range" min="2" max="8" value="4" class="range">
+            <div class="muted text-xs">Value: <span id="fpt-k-val">4</span></div>
+          </div>
+          <div class="btn-row mt-3">
+            <button id="fpt-rand" class="btn primary">Random graph</button>
+            <button id="fpt-run" class="btn ghost">Run</button>
+          </div>
+          <div id="fpt-output" class="result-line mt-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources" class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Take-home</p>
+            <h2 class="section-title">Further resources</h2>
+          </div>
+        </div>
+        <div class="resource-grid">
+          <div>
+            <h3 class="resource-title">Learning</h3>
+            <ul class="resource-list">
+              <li><a href="https://ocw.mit.edu/courses/6-046j-introduction-to-algorithms-sma-5503-fall-2005/pages/lecture-notes/" target="_blank" rel="noopener noreferrer">MIT OCW 6.046J: Complexity lectures</a></li>
+              <li>Sipser, Michael. Introduction to the Theory of Computation (3rd ed.).</li>
+              <li><a href="https://www.scottaaronson.com/papers/pnp.pdf" target="_blank" rel="noopener noreferrer">Scott Aaronson: NP-complete Problems and Physical Reality</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="resource-title">P vs NP milestones</h3>
+            <ul class="resource-list">
+              <li><a href="https://members.loria.fr/CGavoille/CPF/Complexity/cook71.pdf" target="_blank" rel="noopener noreferrer">Cook (1971): Theorem-proving procedures</a></li>
+              <li><a href="https://www.cs.princeton.edu/courses/archive/fall06/cos528/handouts/karp.pdf" target="_blank" rel="noopener noreferrer">Karp (1972): Reducibility among problems</a></li>
+              <li><a href="https://www.claymath.org/millennium-problems/p-vs-np-problem/" target="_blank" rel="noopener noreferrer">Clay Millennium Prize: P vs NP</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>Built for this exhibit. Motion honors reduced-motion preferences.</div>
+      <div class="muted">No backends or fetch calls. Presets are baked in. Crafted by <a class="brand-link" href="https://www.bonelli.dev/" target="_blank" rel="noopener noreferrer">Bonelli.dev</a>.</div>
+    </div>
+  </footer>
+
+  <script src="./script.remade.js"></script>
+</body>
+</html>
+
+
+
