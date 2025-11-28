@@ -10,12 +10,12 @@ function App() {
         <div className="nav-inner">
           <div className="brand">
             <div>
-              <div className="brand-title">P vs NP Exploration Hall</div>
+              <div className="brand-title">Theorem Proving Practice</div>
               <div className="brand-sub">Interactive Learning System</div>
             </div>
           </div>
           <div className="nav-actions">
-            <button id="handout-toggle" className="chip ghost">Print handout</button>
+            <a href="https://www.bonelli.dev/" target="_blank" rel="noopener noreferrer" className="chip ghost">Made by Bonelli.dev</a>
           </div>
         </div>
       </header>
@@ -25,11 +25,11 @@ function App() {
           <div className="hero-bg"></div>
           <div className="section-inner hero-grid">
             <div>
-              <p className="eyebrow reveal">Museum Exhibit</p>
+              <p className="eyebrow reveal">Interactive Learning</p>
               <h1 className="hero-title reveal"><span className="title-sweep">Is checking as easy as finding?</span></h1>
-              <p className="hero-copy reveal">Move from verification to search, ride the reductions conveyor, and try compact interactives built to feel like a floor exhibit.</p>
+              <p className="hero-copy reveal">Move from verification to search, ride the reductions conveyor, and try compact interactives.</p>
               <div className="hero-actions reveal">
-                <a href="#verify-search" className="btn primary">Enter the hall</a>
+                <a href="#verify-search" className="btn primary">Start Practice</a>
                 <a href="#orientation" className="btn ghost">Orientation strip</a>
               </div>
             </div>
@@ -50,8 +50,8 @@ function App() {
 
       <footer className="footer">
         <div className="footer-inner">
-          <div>Built for this exhibit. Motion honors reduced-motion preferences.</div>
-          <div className="muted">No backends or fetch calls. Presets are baked in.</div>
+          <div>Motion honors reduced-motion preferences.</div>
+          <div className="muted">Crafted by <a href="https://www.bonelli.dev/" className="brand-link" target="_blank" rel="noopener noreferrer">Bonelli.dev</a>.</div>
         </div>
       </footer>
     </>
